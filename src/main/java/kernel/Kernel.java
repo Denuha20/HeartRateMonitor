@@ -9,6 +9,7 @@ import OpenCOM.*;
 import HighRate.IHigh;
 import LowRate.ILow;
 import NormalRate.INormal;
+import Connector.IConnector;
 import Database.Database;
 //import java.io.File;
 
@@ -26,6 +27,7 @@ import java.util.Scanner;
  *
  * @author denuha
  */
+
 public class Kernel {
     
     public static void main(String[] args) {
@@ -45,15 +47,26 @@ public class Kernel {
         pILife.startup(pIOCM);
         
         // Create the Normal component
-        IUnknown pCalcIUnk = (IUnknown) pIOCM.createInstance("NormalRate.Normal", "Normal");
-        pILife =  (ILifeCycle) pCalcIUnk.QueryInterface("OpenCOM.ILifeCycle");
+        IUnknown pNormIUnk = (IUnknown) pIOCM.createInstance("NormalRate.Normal", "Normal");
+        pILife =  (ILifeCycle) pNormIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
         
-        // Get the Normal Interface
-        INormal pICalc =  (INormal) pCalcIUnk.QueryInterface("NormalRate.INormal");
+        // Create the Connector component
+        IUnknown pConIUnk = (IUnknown) pIOCM.createInstance("Connector.Connector", "Connector");
+        pILife =  (ILifeCycle) pConIUnk.QueryInterface("OpenCOM.ILifeCycle");
+        pILife.startup(pIOCM);
         
-        long ConnID1 = runtime.connect(pCalcIUnk, pAdderIUnk, "HighRate.IHigh");
-        long ConnID2 = runtime.connect(pCalcIUnk, pSubIUnk, "LowRate.ILow");
+        
+        // Get the Normal Interface
+        //INormal pICalc =  (INormal) pCalcIUnk.QueryInterface("NormalRate.INormal");
+        
+        //Get connector interface
+        IConnector pIRate =  (IConnector) pConIUnk.QueryInterface("Connector.IConnector");
+        
+        
+        long ConnID1 = runtime.connect(pNormIUnk, pAdderIUnk, "HighRate.IHigh");
+        long ConnID2 = runtime.connect(pNormIUnk, pSubIUnk, "LowRate.ILow");
+        long ConnID3 = runtime.connect(pConIUnk, pNormIUnk, "NormalRate.INormal");
         
         // test low and high
         //System.out.println("180 bpm "+ pICalc.MessageHigh(180));
@@ -78,17 +91,17 @@ public class Kernel {
             for (Integer i : rate) {
             int rates = i;
             Database record = new Database(rates);
-            pICalc.MessageLow(i);
+            pIRate.MessageLow(i);
             //rates.getDatabase();
             if(i<60){
-                System.out.println(i + "bpm: " + pICalc.MessageLow(i));        
+                System.out.println(i + "bpm: " + pIRate.MessageLow(i));        
             }
             else if(i>100){
-                System.out.println(i + "bpm: " + pICalc.MessageHigh(i));        
+                System.out.println(i + "bpm: " + pIRate.MessageHigh(i));        
             }
             
             else{
-                System.out.println(i + "bpm: " + pICalc.MessageNormal(i));        
+                System.out.println(i + "bpm: " + pIRate.MessageNormal(i));        
             }
         //System.out.println(i);
         
@@ -124,4 +137,3 @@ public class Kernel {
         
 }
 }
- 
