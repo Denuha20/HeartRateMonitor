@@ -13,6 +13,8 @@ import java.util.*;
 // Interfaces
 import HighRate.IHigh;
 import LowRate.ILow;
+import Database.IDatabase;
+
 /**
  *
  * @author denuha
@@ -29,6 +31,8 @@ public class Normal extends OpenCOMComponent implements INormal, IConnections, I
      * 
      */
     public OCM_SingleReceptacle<ILow> m_PSR_ILow;
+    
+    public OCM_SingleReceptacle<IDatabase> m_PSR_IDatabase;
 
     /** Creates a new instance 
      * @param binder */
@@ -38,6 +42,8 @@ public class Normal extends OpenCOMComponent implements INormal, IConnections, I
         // Initiate the receptacles
         m_PSR_IHigh = new OCM_SingleReceptacle<IHigh>(IHigh.class);
         m_PSR_ILow = new OCM_SingleReceptacle<ILow>(ILow.class);
+        m_PSR_IDatabase = new OCM_SingleReceptacle<IDatabase>(IDatabase.class);
+
     }
     
 
@@ -62,6 +68,14 @@ public class Normal extends OpenCOMComponent implements INormal, IConnections, I
          */
         return ("Your heart rate is normal");
     }    
+    
+        public void RecordDatabase(int a) {
+        /*
+         * Standard single receptacle invocation to retrieve the functionality required.
+         */
+        m_PSR_IDatabase.m_pIntf.RecordDatabase(a);
+    }    
+        
     /**
      * Concatenate a display message to the passed message.
      * @param message The message to attach to.
@@ -94,8 +108,10 @@ public class Normal extends OpenCOMComponent implements INormal, IConnections, I
         else if(riid.toString().equalsIgnoreCase("LowRate.ILow")){
 		return m_PSR_ILow.connectToRecp(pSinkIntf, riid, provConnID);
 	}
-
-	return false;
+        else if(riid.toString().equalsIgnoreCase("Database.IDatabase")){
+		return m_PSR_IDatabase.connectToRecp(pSinkIntf, riid, provConnID);
+	}
+        return false;
     }
     
     public boolean disconnect(String riid, long connID) {
@@ -106,7 +122,10 @@ public class Normal extends OpenCOMComponent implements INormal, IConnections, I
         else if(riid.toString().equalsIgnoreCase("LowRate.ILow")){
 		return m_PSR_ILow.disconnectFromRecp(connID);
 	}
-	return false;
+        else if(riid.toString().equalsIgnoreCase("Database.IDatabase")){
+		return m_PSR_IDatabase.disconnectFromRecp(connID);
+	}
+        return false;
     }
     
     // ILifeCycle Interface
