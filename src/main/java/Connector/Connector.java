@@ -58,6 +58,15 @@ public class Connector extends OpenCOMComponent implements IConnector, IConnecti
         return m_PSR_INormal.m_pIntf.MessageNormal(a);
         //return "lol";
     }    
+    
+    public void RecordDatabase(int a) {
+        /*
+         * Standard single receptacle invocation to retrieve the functionality required.
+         */
+         m_PSR_INormal.m_pIntf.MessageNormal(a);
+        //return "lol";
+    }  
+    
     /**
      * Concatenate a display message to the passed message.
      * @param message The message to attach to.
