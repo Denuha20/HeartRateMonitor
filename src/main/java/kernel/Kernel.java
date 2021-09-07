@@ -31,6 +31,7 @@ import java.util.Scanner;
 public class Kernel {
     
     public static void main(String[] args) {
+        
 
         // Create the OpenCOM runtime & Get the IOpenCOM interface reference
         OpenCOM runtime = new OpenCOM();
@@ -56,6 +57,11 @@ public class Kernel {
         pILife =  (ILifeCycle) pConIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
         
+        //Record database
+        // Create the Low component
+        IUnknown pDataIUnk = (IUnknown) pIOCM.createInstance("Database.Database", "Database");
+        pILife =  (ILifeCycle) pDataIUnk.QueryInterface("OpenCOM.ILifeCycle");
+        pILife.startup(pIOCM);        
         
         // Get the Normal Interface
         //INormal pICalc =  (INormal) pCalcIUnk.QueryInterface("NormalRate.INormal");
@@ -89,9 +95,10 @@ public class Kernel {
                 }
             }       
             for (Integer i : rate) {
-            int rates = i;
-            Database record = new Database(rates);
-            pIRate.MessageLow(i);
+            //int rates = i;
+            //Database record = new Database(rates);
+            //pIRate.MessageLow(i);
+            pIRate.RecordDatabase(i);
             //rates.getDatabase();
             if(i<60){
                 System.out.println(i + "bpm: " + pIRate.MessageLow(i));        
@@ -104,19 +111,7 @@ public class Kernel {
                 System.out.println(i + "bpm: " + pIRate.MessageNormal(i));        
             }
         //System.out.println(i);
-        
-        try {  
-    //String str = "Hello";
-    BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/denuha/NetBeansProjects/OpenComTest/src/main/java/kernel/RecordRates.txt"));
-    writer.write(rates);
-    
-    writer.close();
-    System.out.println("Successfully wrote to the file.");
-    } catch (IOException e) {
-      System.out.println("An error occurred.");
-      e.printStackTrace();
-    } 
-    }                
+     }                
            // for (int i = 0; i < rate.size; i++) {
             //    System.out.println(rate[i]);
     //} 
