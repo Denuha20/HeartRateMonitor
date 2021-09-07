@@ -21,6 +21,8 @@ public interface IConnector extends IUnknown{
 
     public String MessageNormal(int x);
 
+    public void RecordDatabase(int x);
+
     public String display(String a);
     
 
