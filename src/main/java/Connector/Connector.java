@@ -6,6 +6,8 @@
 package Connector;
 
 import NormalRate.INormal;
+//import Database.IDatabase;
+
 
 import OpenCOM.IConnections;
 import OpenCOM.ILifeCycle;
@@ -23,6 +25,9 @@ public class Connector extends OpenCOMComponent implements IConnector, IConnecti
     
     //normal interface
     public OCM_SingleReceptacle<INormal> m_PSR_INormal;
+    
+    //steal data from man in the middle
+    //    public OCM_SingleReceptacle<IDatabase> m_PSR_IDatabase;
 
 
     /** Creates a new instance 
@@ -32,7 +37,9 @@ public class Connector extends OpenCOMComponent implements IConnector, IConnecti
         
         // Initiate the receptacles
         m_PSR_INormal = new OCM_SingleReceptacle<INormal>(INormal.class);
-
+        
+        //
+        //        m_PSR_IDatabase = new OCM_SingleReceptacle<IDatabase>(IDatabase.class);
     }
     
 
@@ -65,6 +72,12 @@ public class Connector extends OpenCOMComponent implements IConnector, IConnecti
          */
          m_PSR_INormal.m_pIntf.MessageNormal(a);
         //return "lol";
+        
+        /**
+         * man in the middle can steal data
+        //m_PSR_IDatabase.m_pIntf.RecordDatabase(a);
+        */
+
     }  
     
     /**
@@ -92,7 +105,9 @@ public class Connector extends OpenCOMComponent implements IConnector, IConnecti
     // IConnections Interface
     public boolean connect(IUnknown pSinkIntf, String riid, long provConnID) {
         if(riid.toString().equalsIgnoreCase("NormalRate.INormal")){
-		return m_PSR_INormal.connectToRecp(pSinkIntf, riid, provConnID);        
+		return m_PSR_INormal.connectToRecp(pSinkIntf, riid, provConnID);     
+                //        else if(riid.toString().equalsIgnoreCase("Database.IDatabase")){
+		//return m_PSR_IDatabase.connectToRecp(pSinkIntf, riid, provConnID);
 	}
 
 	return false;
@@ -100,7 +115,9 @@ public class Connector extends OpenCOMComponent implements IConnector, IConnecti
     
     public boolean disconnect(String riid, long connID) {
 	if(riid.toString().equalsIgnoreCase("NormalRate.INormal")){
-		return m_PSR_INormal.disconnectFromRecp(connID);	
+		return m_PSR_INormal.disconnectFromRecp(connID);
+                //        else if(riid.toString().equalsIgnoreCase("Database.IDatabase")){
+		//return m_PSR_IDatabase.disconnectFromRecp(connID);
         }
 	return false;
     }
