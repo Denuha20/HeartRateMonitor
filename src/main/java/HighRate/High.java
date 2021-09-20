@@ -23,7 +23,7 @@ public class High extends OpenCOMComponent implements IUnknown, IHigh, IMetaInte
             return "Your heart rate is too high";
         }
         else{
-        return "Your heart rate is  high";
+        return "Your heart rate is high";
         }
     }
      
