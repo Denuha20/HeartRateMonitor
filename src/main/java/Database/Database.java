@@ -7,10 +7,7 @@ package Database;
 
 
 import Database.IDatabase;
-import OpenCOM.ILifeCycle;
-import OpenCOM.IMetaInterface;
-import OpenCOM.IUnknown;
-import OpenCOM.OpenCOMComponent;
+import OpenCOM.*;
 import java.io.*;
 
 /**
